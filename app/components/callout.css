@@ -1,0 +1,29 @@
+/* info (accent) · tip (ok) · warn (danger soft) · alert (danger loud).
+   Token-tinted via color-mix so every theme/mode works; the emoji prefix lives
+   in the component, not here. */
+.callout {
+  border-radius: var(--radius);
+  padding: 12px 16px;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--text);
+  margin: 14px 0;
+  border-left: 3px solid var(--border);
+}
+.callout.info {
+  border-left-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+}
+.callout.tip {
+  border-left-color: var(--ok);
+  background: color-mix(in srgb, var(--ok) 12%, transparent);
+}
+.callout.warn {
+  border-left-color: var(--danger);
+  background: color-mix(in srgb, var(--danger) 10%, transparent);
+}
+.callout.alert {
+  border-left-color: var(--danger);
+  font-weight: 600;
+  background: color-mix(in srgb, var(--danger) 18%, transparent);
+}

@@ -1,0 +1,16 @@
+.stat {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 18px;
+  min-width: 128px;
+}
+.stat .n {
+  font-size: 26px;
+  font-weight: 700;
+  font-family: var(--font-display);
+}
+.stat .l {
+  font-size: 12px;
+  color: var(--muted);
+}

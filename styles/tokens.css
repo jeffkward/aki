@@ -1,0 +1,358 @@
+/* aki — theme token library.
+   ═══════════════════════════════════════════════════════════════
+   THE CONTRACT: component CSS never names a colour — it only uses
+   these semantic tokens. A theme = one [data-theme=X][data-mode=Y]
+   block per mode, and EVERY theme must define BOTH modes.
+
+   - Pick a theme with <html data-theme="..." data-mode="light|dark">.
+   - Paired tokens travel together: --accent with --on-accent,
+     --primary with --on-primary (contrast is decided here, once).
+   - "Custom colours" = a new block, not new machinery.
+   - The theme LIST is parsed out of this file at runtime
+     (app/lib/themes.ts) so the switcher can never be a stale
+     hardcoded array.
+   - Shape is NOT a theme choice — one radius for every theme.
+
+   Tokens: --bg --card --border --text --muted
+           --primary/--on-primary  --secondary/--on-secondary
+           --accent/--on-accent    --danger --ok
+           --radius --radius-btn   --font-display/--font-body/--font-mono
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Bridge the tokens into Tailwind ──────────────────────────────
+   `@theme inline` registers utilities that emit `var(--token)` rather than a
+   resolved value — so `font-display` and `text-h1` follow [data-theme] at RUN
+   TIME, which a normal @theme block could not do (it bakes values at build).
+
+   This is why typography can be written either way: an unclassed <h1> gets the
+   scale from base.css, and `class="text-h2"` on anything else pulls the SAME
+   number. One source of truth, two spellings.
+
+   Colours are deliberately NOT exposed this way. They stay in component CSS,
+   so there is one vocabulary for colour (tokens in .css beside a component)
+   rather than two. See CLAUDE.md. */
+@theme inline {
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
+  --font-mono: var(--font-mono);
+
+  --text-h1: var(--size-h1);
+  --text-h2: var(--size-h2);
+  --text-h3: var(--size-h3);
+  --text-h4: var(--size-h4);
+  --text-body: var(--size-body);
+  --text-sub: var(--size-sub);
+  --text-meta: var(--size-meta);
+
+  --radius-card: var(--radius);
+  --radius-btn: var(--radius-btn);
+}
+
+:root {
+  --font-display: Inter, -apple-system, sans-serif;
+  --font-body: Inter, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --radius: 20px;
+  --radius-btn: 99px;
+
+  /* Type scale. base.css applies these to bare elements; the @theme bridge
+     above turns the same values into text-h1 … text-meta utilities. */
+  --size-h1: 30px;
+  --size-h2: 23px;
+  --size-h3: 18px;
+  --size-h4: 15.5px;
+  --size-body: 15px;
+  --size-sub: 14px;
+  --size-meta: 12.5px;
+  --on-accent: #fff; /* themes with light accents override */
+}
+
+/* ---------- OCHRE (default) ---------- */
+[data-theme="ochre"][data-mode="light"] {
+  --bg: #ffffff;
+  --card: #fafafa;
+  --border: #e5e5e5;
+  --text: #171717;
+  --muted: #737373;
+  --primary: #854d0e;
+  --on-primary: #fff;
+  --secondary: #e0e0e0;
+  --on-secondary: #171717;
+  --accent: #a16207;
+  --danger: #dc2626;
+  --ok: #15803d;
+}
+[data-theme="ochre"][data-mode="dark"] {
+  --bg: #0a0a0a;
+  --card: #171717;
+  --border: #2e2e2e;
+  --text: #fafafa;
+  --muted: #8a8a8a;
+  --primary: #d97706;
+  --on-primary: #160e02;
+  --secondary: #262626;
+  --on-secondary: #fafafa;
+  --accent: #eab308;
+  --danger: #ef4444;
+  --ok: #4ade80;
+}
+
+/* ---------- VANILLA SKY ---------- */
+[data-theme="sky"][data-mode="light"] {
+  --bg: #f8fafc;
+  --card: #ffffff;
+  --border: #e2e8f0;
+  --text: #0f172a;
+  --muted: #64748b;
+  --primary: #0369a1;
+  --on-primary: #fff;
+  --secondary: #e2e8f0;
+  --on-secondary: #0f172a;
+  --accent: #38bdf8;
+  --on-accent: #082f49;
+  --danger: #dc2626;
+  --ok: #16a34a;
+}
+[data-theme="sky"][data-mode="dark"] {
+  --bg: #0c0e11;
+  --card: #16191d;
+  --border: #2a2e34;
+  --text: #f2f4f6;
+  --muted: #8f969e;
+  --primary: #0ea5e9;
+  --on-primary: #082f49;
+  --secondary: #262b31;
+  --on-secondary: #f2f4f6;
+  --accent: #38bdf8;
+  --on-accent: #082f49;
+  --danger: #ef4444;
+  --ok: #4ade80;
+}
+
+/* ---------- VANILLA (slate + sky) ---------- */
+/* Accent is TEAL, not the primary blue — analogous rather than complementary,
+   so the theme stays cohesive while the two roles stay distinguishable. Also
+   shipped identical until 2026-09-18. */
+[data-theme="vanilla"][data-mode="light"] {
+  --bg: #f8fafc;
+  --card: #ffffff;
+  --border: #e2e8f0;
+  --text: #0f172a;
+  --muted: #64748b;
+  --primary: #0369a1;
+  --on-primary: #fff;
+  --secondary: #e2e8f0;
+  --on-secondary: #0f172a;
+  --accent: #0d9488;
+  --danger: #dc2626;
+  --ok: #16a34a;
+}
+[data-theme="vanilla"][data-mode="dark"] {
+  --bg: #0f172a;
+  --card: #1e293b;
+  --border: #334155;
+  --text: #f8fafc;
+  --muted: #94a3b8;
+  --primary: #38bdf8;
+  --on-primary: #0f172a;
+  --secondary: #334155;
+  --on-secondary: #f8fafc;
+  --accent: #2dd4bf;
+  --on-accent: #042f2e;
+  --danger: #ef4444;
+  --ok: #4ade80;
+}
+
+/* ---------- OPS GREEN ---------- */
+/* Accent is BLUE, not the primary green. `--primary` marks the action and
+   `--accent` marks links, focus rings and active chips, so an Accent button that
+   matches the Primary button makes both meaningless. Shipped identical (ported
+   from V2) until 2026-09-18. Blue is also furthest from --danger, so accent and
+   danger never read as the same kind of thing. */
+[data-theme="ops"][data-mode="light"] {
+  --bg: #f1f5f9;
+  --card: #ffffff;
+  --border: #cbd5e1;
+  --text: #1e293b;
+  --muted: #64748b;
+  --primary: #16a34a;
+  --on-primary: #fff;
+  --secondary: #e2e8f0;
+  --on-secondary: #1e293b;
+  --accent: #0369a1;
+  --danger: #dc2626;
+  --ok: #16a34a;
+}
+[data-theme="ops"][data-mode="dark"] {
+  --bg: #0f172a;
+  --card: #1e293b;
+  --border: #475569;
+  --text: #f8fafc;
+  --muted: #94a3b8;
+  --primary: #22c55e;
+  --on-primary: #04170a;
+  --secondary: #334155;
+  --on-secondary: #f8fafc;
+  --accent: #38bdf8;
+  --on-accent: #082f49;
+  --danger: #ef4444;
+  --ok: #22c55e;
+}
+
+/* ---------- BIOPHILIC ---------- */
+[data-theme="bio"] {
+  --font-display: Lora, serif;
+  --font-body: Raleway, sans-serif;
+}
+[data-theme="bio"][data-mode="light"] {
+  --bg: #faf5ff;
+  --card: #ffffff;
+  --border: #ede9fe;
+  --text: #4c1d95;
+  --muted: #7c6fa0;
+  --primary: #059669;
+  --on-primary: #fff;
+  --secondary: #c4b5fd;
+  --on-secondary: #3b0764;
+  --accent: #8b5cf6;
+  --danger: #dc2626;
+  --ok: #059669;
+}
+[data-theme="bio"][data-mode="dark"] {
+  --bg: #1e1b2e;
+  --card: #2a2540;
+  --border: #3f3859;
+  --text: #ede9fe;
+  --muted: #a79fc7;
+  --primary: #34d399;
+  --on-primary: #062b1e;
+  --secondary: #4c4370;
+  --on-secondary: #ede9fe;
+  --accent: #a78bfa;
+  --danger: #f87171;
+  --ok: #34d399;
+}
+
+/* ---------- BEAR'S DEN (cedar + birch) ---------- */
+[data-theme="den"] {
+  --font-display: Lora, serif;
+  --font-body: Raleway, sans-serif;
+}
+[data-theme="den"][data-mode="light"] {
+  --bg: #faf7f2;
+  --card: #ffffff;
+  --border: #e4dccb;
+  --text: #3f3d33;
+  --muted: #8a8570;
+  --primary: #4f772d;
+  --on-primary: #fff;
+  --secondary: #dce5cd;
+  --on-secondary: #31572c;
+  --accent: #90a955;
+  --danger: #bc4749;
+  --ok: #4f772d;
+}
+[data-theme="den"][data-mode="dark"] {
+  --bg: #1b1f1a;
+  --card: #262b24;
+  --border: #3a4034;
+  --text: #edeae0;
+  --muted: #9ba18f;
+  --primary: #90a955;
+  --on-primary: #141710;
+  --secondary: #3a4034;
+  --on-secondary: #edeae0;
+  --accent: #b5c99a;
+  --danger: #e07a5f;
+  --ok: #90a955;
+}
+
+/* ---------- FLAT TEAL ---------- */
+[data-theme="teal"][data-mode="light"] {
+  --bg: #f0fdfa;
+  --card: #ffffff;
+  --border: #99f6e4;
+  --text: #134e4a;
+  --muted: #4b7b76;
+  --primary: #0d9488;
+  --on-primary: #fff;
+  --secondary: #ccfbf1;
+  --on-secondary: #134e4a;
+  --accent: #ea580c;
+  --danger: #dc2626;
+  --ok: #0d9488;
+}
+[data-theme="teal"][data-mode="dark"] {
+  --bg: #042f2e;
+  --card: #0a413f;
+  --border: #155e56;
+  --text: #f0fdfa;
+  --muted: #7bc4bc;
+  --primary: #2dd4bf;
+  --on-primary: #042f2e;
+  --secondary: #155e56;
+  --on-secondary: #f0fdfa;
+  --accent: #fb923c;
+  --danger: #f87171;
+  --ok: #2dd4bf;
+}
+
+/* ---------- NIGHT INDIGO ---------- */
+[data-theme="indigo"][data-mode="light"] {
+  --bg: #eef2ff;
+  --card: #ffffff;
+  --border: #c7d2fe;
+  --text: #1e1b4b;
+  --muted: #6b6a8f;
+  --primary: #4338ca;
+  --on-primary: #fff;
+  --secondary: #e0e7ff;
+  --on-secondary: #1e1b4b;
+  --accent: #7c3aed;
+  --danger: #dc2626;
+  --ok: #16a34a;
+}
+[data-theme="indigo"][data-mode="dark"] {
+  --bg: #0f172a;
+  --card: #1e1b4b;
+  --border: #37347a;
+  --text: #e0e7ff;
+  --muted: #94a3d8;
+  --primary: #6366f1;
+  --on-primary: #fff;
+  --secondary: #312e81;
+  --on-secondary: #e0e7ff;
+  --accent: #a78bfa;
+  --danger: #f87171;
+  --ok: #4ade80;
+}
+
+/* ---------- AMBER SUNSET ---------- */
+[data-theme="amber"][data-mode="light"] {
+  --bg: #fffbeb;
+  --card: #ffffff;
+  --border: #fde68a;
+  --text: #292110;
+  --muted: #8a7a54;
+  --primary: #d97706;
+  --on-primary: #fff;
+  --secondary: #fef3c7;
+  --on-secondary: #78350f;
+  --accent: #2563eb;
+  --danger: #dc2626;
+  --ok: #15803d;
+}
+[data-theme="amber"][data-mode="dark"] {
+  --bg: #211a0b;
+  --card: #2e2410;
+  --border: #4a3a1a;
+  --text: #fef3c7;
+  --muted: #b39f6f;
+  --primary: #f59e0b;
+  --on-primary: #211a0b;
+  --secondary: #4a3a1a;
+  --on-secondary: #fef3c7;
+  --accent: #60a5fa;
+  --danger: #f87171;
+  --ok: #4ade80;
+}

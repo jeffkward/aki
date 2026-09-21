@@ -1,0 +1,9 @@
+node_modules/
+*.db
+*.db-wal
+*.db-shm
+public/app.css
+.DS_Store
+.test.db*
+dist/
+assets/aki.icns

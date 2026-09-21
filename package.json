@@ -1,0 +1,45 @@
+{
+  "name": "aki",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "bun run css & bun --hot app/server.ts",
+    "css": "bunx @tailwindcss/cli -i styles/app.css -o public/app.css --watch",
+    "css:build": "bunx @tailwindcss/cli -i styles/app.css -o public/app.css",
+    "components:index": "bun run scripts/components-index.ts",
+    "db:generate": "bunx drizzle-kit generate && bun run scripts/build-migrations.ts",
+    "db:migrate": "bunx drizzle-kit migrate",
+    "routes": "bun run app/routes-list.ts",
+    "test": "rm -f .test.db .test.db-wal .test.db-shm && AKI_DB=./.test.db bun test",
+    "check": "bunx biome check --write . && bun run components:index && rm -f .test.db .test.db-wal .test.db-shm && AKI_DB=./.test.db bun test",
+    "build:binary": "bun run css:build && bun run scripts/build-binary.ts",
+    "package:mac": "./scripts/package-mac.sh",
+    "icon": "./scripts/make-icns.sh",
+    "rename": "bun run scripts/rename.ts",
+    "hotfix": "bun run scripts/hotfix.ts"
+  },
+  "dependencies": {
+    "@hono/zod-validator": "^0.9.1",
+    "drizzle-orm": "^0.45.2",
+    "hono": "^4.13.8",
+    "htmx.org": "^2.0.10",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.5.14",
+    "@tailwindcss/cli": "^4.3.3",
+    "@types/bun": "^1.4.2",
+    "drizzle-kit": "^0.31.10",
+    "tailwindcss": "^4.3.3"
+  },
+  "trustedDependencies": [
+    "@parcel/watcher"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jeffkward/aki.git"
+  },
+  "description": "A starter for web apps: TypeScript, Bun, Hono, server-rendered JSX + HTMX, Zod, Drizzle, SQLite \u2014 with a component contract enforced by tests."
+}

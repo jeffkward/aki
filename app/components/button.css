@@ -1,0 +1,54 @@
+.btn {
+  border: none;
+  border-radius: var(--radius-btn);
+  padding: 11px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: var(--font-body);
+  transition:
+    transform 0.15s,
+    opacity 0.15s,
+    border-color 0.15s;
+}
+.btn:hover {
+  transform: translateY(-1px);
+  opacity: 0.92;
+}
+/* Any button that cannot act says so before you try. A test asserts this rule. */
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.btn:disabled:hover {
+  transform: none;
+  opacity: 0.5;
+}
+.btn.primary {
+  background: var(--primary);
+  color: var(--on-primary);
+}
+.btn.secondary {
+  background: var(--secondary);
+  color: var(--on-secondary);
+}
+.btn.accent {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+.btn.danger {
+  background: var(--danger);
+  color: var(--on-accent);
+}
+.btn.ghost {
+  background: transparent;
+  color: var(--text);
+  border: 1.5px solid var(--border);
+}
+.btn.sm {
+  padding: 6px 14px;
+  font-size: 12.5px;
+}
+.btn.icon-only {
+  padding: 11px 13px;
+}

@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img">
+  <title>aki — a sun over layered land</title>
+  <!-- aki app icon. Source of truth; `bun run icon` generates assets/aki.icns.
+       Specs and the reasoning: packaging/README.md → "The app icon".
+
+       GEOMETRY IS MEASURED, NOT GUESSED. macOS renders an icon exactly as drawn
+       (unlike iOS, it does not round it for you), and stock icons follow one
+       standard — measured off Notes.app and Music.app, which are identical:
+
+         shape        79.7% of the 1024 canvas  → 816px, inset 104px
+         corner inset 12.3% of the shape width
+
+       The inset is NOT wasted space: it is the shadow room every stock icon
+       leaves, and matching it is what makes this sit at the same size as its
+       neighbours in the dock.
+
+       The corner here is a circular-arc rounded rect at r=175, chosen because it
+       MEASURES 12.3% like Apple's. Apple's true shape is a superellipse with
+       continuous curvature; the difference is imperceptible at icon sizes, and a
+       compact path is worth more than purity in a file people will edit.
+
+       Composition was chosen at ACTUAL DOCK SIZE, not at 512px: one large shape
+       (the sun) is what stays legible at 16-32px. -->
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FDF0D5"/>
+      <stop offset="100%" stop-color="#F6D799"/>
+    </linearGradient>
+    <clipPath id="sq"><path d="M278.9 103.9 H745.1 A175 175 0 0 1 920.1 278.9 V745.1 A175 175 0 0 1 745.1 920.1 H278.9 A175 175 0 0 1 103.9 745.1 V278.9 A175 175 0 0 1 278.9 103.9 Z"/></clipPath>
+  </defs>
+  <g clip-path="url(#sq)">
+    <rect x="103.9" y="103.9" width="816.1" height="816.1" fill="url(#sky)"/>
+    <circle cx="662.2" cy="334.9" r="135.5" fill="#EAB308"/>
+    <path d="M103.9 582.2 Q 308.0 526.7 512.0 565.9 T 920.1 545.5 L920.1 920.1 L103.9 920.1 Z" fill="#D9A441"/>
+    <path d="M103.9 669.5 Q 308.0 733.2 597.7 653.2 T 920.1 721.7 L920.1 920.1 L103.9 920.1 Z" fill="#A16207"/>
+    <path d="M103.9 773.2 Q 308.0 717.7 662.2 756.8 T 920.1 741.3 L920.1 920.1 L103.9 920.1 Z" fill="#854D0E"/>
+  </g>
+</svg>

@@ -1,0 +1,56 @@
+.chip {
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  border-radius: 99px;
+  padding: 7px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.chip:hover {
+  border-color: var(--accent);
+}
+.chip.active {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.chip.listchip {
+  cursor: default;
+}
+.chip.listchip .x {
+  background: none;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 15px;
+  line-height: 1;
+  padding: 0 2px;
+  font-family: var(--font-body);
+}
+.chip.listchip .x:hover {
+  color: var(--danger);
+}
+.chip.metachip {
+  cursor: default;
+  font-weight: 400;
+  font-size: 12px;
+}
+.chip.metachip b {
+  font-weight: 700;
+}
+/* input[type=text] (an attribute selector) outranks a bare class, so `.chip-add`
+   alone silently loses to the generic input rule. `input.chip-add` ties on
+   specificity and wins on source order. Do not "simplify" this selector. */
+input.chip-add {
+  border: 1.5px dashed var(--border);
+  background: transparent;
+  border-radius: 99px;
+  padding: 7px 14px;
+  font-size: 13px;
+  color: var(--text);
+  min-width: 140px;
+  font-family: var(--font-body);
+}

@@ -1,0 +1,55 @@
+/* One rule for every text-ish control so they share a height and a shape. */
+input,
+select,
+textarea {
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+  border-radius: 10px;
+  padding: 9px 12px;
+  font-size: 14px;
+  font-family: var(--font-body);
+  line-height: 1.4;
+  height: 38px; /* explicit: a native select is otherwise shorter */
+  box-sizing: border-box;
+}
+textarea {
+  height: auto;
+}
+input::placeholder,
+textarea::placeholder {
+  color: var(--muted);
+}
+label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+/* A native <select> renders with the platform's own metrics and chrome, so it
+   never matches an <input> however you pad it. Strip the appearance and supply
+   our own chevron — as MARKUP, not a background-image, because a data-URI
+   arrow would have to hard-code a colour and the token contract forbids it. */
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 32px;
+}
+.select-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: stretch;
+}
+.select-wrap select {
+  width: 100%;
+}
+.select-wrap .chev {
+  position: absolute;
+  right: 11px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: var(--muted);
+  font-size: 10px;
+  line-height: 1;
+}

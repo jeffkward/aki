@@ -1,0 +1,23 @@
+.bubble {
+  border-radius: var(--radius);
+  padding: 12px 16px;
+  max-width: 560px;
+  font-size: 14px;
+  line-height: 1.55;
+  margin-bottom: 10px;
+}
+.bubble.them {
+  background: var(--secondary);
+  color: var(--on-secondary);
+}
+.bubble.me {
+  background: var(--accent);
+  color: var(--on-accent);
+  margin-left: auto;
+}
+.bubble p {
+  margin: 0 0 8px;
+}
+.bubble p:last-child {
+  margin-bottom: 0;
+}

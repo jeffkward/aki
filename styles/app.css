@@ -1,0 +1,18 @@
+/* aki — stylesheet entry.
+   Tailwind supplies LAYOUT UTILITIES ONLY (flex, gap, grid, spacing).
+   Colour, type and shape come from tokens.css. Never use a Tailwind colour
+   utility (bg-slate-900, text-gray-500) — see the contract in tokens.css and
+   the tests in tests/components.test.ts. */
+@import "tailwindcss";
+
+/* Tokens stay UNLAYERED on purpose: they only define custom properties on
+   :root / [data-theme] and nothing competes with them. */
+@import "./tokens.css";
+
+/* ⚠️ THE LAYERS ARE LOAD-BEARING — do not drop `layer(...)`.
+   Unlayered CSS beats EVERY @layer in the cascade. Imported without these,
+   `h3 { margin: 1.6em 0 }` in base.css silently outranked `.mt-0` in Tailwind's
+   utilities layer, so `class="mt-0"` did nothing and headings carried margins
+   no utility could remove. A test asserts this order. */
+@import "./base.css" layer(base);
+@import "./components.generated.css" layer(components);

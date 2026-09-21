@@ -1,0 +1,8 @@
+/* Padding is EQUAL on all four sides. It was 18px 20px, which reads as extra
+   space at the top once a heading inside adds its own margin. */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+}
