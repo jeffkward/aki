@@ -2,6 +2,7 @@ import { showRoutes } from "hono/dev";
 import { sqlite } from "../db";
 import { migrateDb } from "../db/migrate";
 import { app } from "./app";
+import { APP_NAME } from "./lib/layout";
 import { packaged } from "./lib/paths";
 
 /* Migrate on boot. A fresh clone — or a shipped .app on someone else's Mac —
@@ -15,7 +16,7 @@ const port = Number(process.env.PORT) || 8787;
 const url = `http://localhost:${port}`;
 
 if (!packaged) showRoutes(app, { verbose: false });
-console.log(`aki → ${url}`);
+console.log(`${APP_NAME} → ${url}`);
 
 /* Packaged, there is no terminal to read that line from — open the browser.
    AKI_NO_OPEN=1 suppresses it (tests, servers, CI). */

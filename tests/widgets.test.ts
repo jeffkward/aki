@@ -7,6 +7,16 @@ import { APP_NAME } from "../app/lib/layout";
    Rails' request specs, minus the setup. */
 
 const form = (o: Record<string, string>) => new URLSearchParams(o);
+// hono/jsx escapes text the way any HTML renderer must; a name like Tom's Kanban
+// arrives as Tom&#39;s Kanban, so compare against the escaped form.
+const esc = (s: string) =>
+  s
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+const NAME = esc(APP_NAME);
 
 describe("widgets", () => {
   it("GET /widgets renders the index", async () => {
@@ -92,19 +102,19 @@ describe("landing page", () => {
     // APP_NAME rather than a literal: this file survives `rename --keep-example`,
     // and a fresh app must not start with a red suite because of its own name.
     // The name reaching the page is behaviour; the sentence around it is copy.
-    expect(html).toContain(APP_NAME);
+    expect(html).toContain(NAME);
     expect(html).toContain('href="/theme"');
     expect(html).toContain('href="/widgets"');
     expect(html).toContain('src="/icon.svg"');
   });
 
   it("titles pages with the app's display name", async () => {
-    expect(await (await app.request("/")).text()).toContain(`<title>${APP_NAME}</title>`);
+    expect(await (await app.request("/")).text()).toContain(`<title>${NAME}</title>`);
     expect(await (await app.request("/widgets")).text()).toContain(
-      `<title>Widgets — ${APP_NAME}</title>`,
+      `<title>Widgets — ${NAME}</title>`,
     );
     expect(await (await app.request("/theme")).text()).toContain(
-      `<title>Theme — ${APP_NAME}</title>`,
+      `<title>Theme — ${NAME}</title>`,
     );
   });
 

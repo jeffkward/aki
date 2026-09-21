@@ -17,7 +17,11 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
-APP_NAME="${APP_NAME:-Aki}"
+# Single-quoted, on its own line, on purpose: bash 3.2 (macOS's) treats a ' inside
+# "${VAR:-default}" as a quote, so a name like Tom's Kanban inlined there broke
+# the whole script at the first stray parenthesis, 70 lines later.
+APP_NAME_DEFAULT='Aki'
+APP_NAME="${APP_NAME:-$APP_NAME_DEFAULT}"
 EXEC_NAME="${EXEC_NAME:-aki}"
 BUNDLE_ID="${BUNDLE_ID:-com.example.aki}"
 VERSION="${VERSION:-$(bun -e 'console.log(require("./package.json").version)')}"
@@ -65,9 +69,12 @@ mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 cp "dist/$EXEC_NAME-shell" "$APP/Contents/MacOS/$EXEC_NAME"
 cp dist/aki "$APP/Contents/MacOS/server"
 cp assets/aki.icns "$APP/Contents/Resources/icon.icns"
-sed -e "s/__APP_NAME__/$APP_NAME/g" -e "s/__BUNDLE_ID__/$BUNDLE_ID/g" \
-    -e "s/__EXEC__/$EXEC_NAME/g"  -e "s/__VERSION__/$VERSION/g" \
+# The name goes in with plutil, not sed: it may contain ', &, / or " and
+# plutil takes any of them; a sed replacement does not.
+sed -e "s/__BUNDLE_ID__/$BUNDLE_ID/g" -e "s/__EXEC__/$EXEC_NAME/g" -e "s/__VERSION__/$VERSION/g" \
     packaging/Info.plist > "$APP/Contents/Info.plist"
+plutil -replace CFBundleName        -string "$APP_NAME" "$APP/Contents/Info.plist"
+plutil -replace CFBundleDisplayName -string "$APP_NAME" "$APP/Contents/Info.plist"
 
 # Optional build-time settings → Info.plist. Each is overridable at run time
 # with `defaults write $BUNDLE_ID <Key> ...`, so this only sets the shipped

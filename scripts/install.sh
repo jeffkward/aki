@@ -69,7 +69,8 @@ note "bun $(bun --version)"
 
 # ── 2. the name ───────────────────────────────────────────────────────────
 slugify() {
-  printf '%s' "$1" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/-/g; s/^-+//; s/-+$//'
+  # apostrophes vanish rather than becoming hyphens: Tom's Kanban → toms-kanban
+  printf '%s' "$1" | sed "s/['’]//g" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/-/g; s/^-+//; s/-+$//'
 }
 
 NAME="${1:-}"

@@ -3,7 +3,7 @@ import icon from "../assets/icon.svg" with { type: "text" };
 import css from "../public/app.css" with { type: "text" };
 import htmx from "../public/htmx.min.js" with { type: "text" };
 import { Card } from "./components";
-import { Layout } from "./lib/layout";
+import { APP_NAME, Layout } from "./lib/layout";
 import { mountTheme } from "./routes/theme";
 import { mountWidgets } from "./routes/widgets";
 
@@ -47,7 +47,7 @@ app.get("/", (c) =>
     <Layout>
       <div class="flex flex-col items-center text-center gap-2 pt-10 pb-2">
         <img src="/icon.svg" alt="aki" width="250" height="250" />
-        <h1 class="mb-0">You're on Aki.</h1>
+        <h1 class="mb-0">You're on {APP_NAME}.</h1>
         <p class="sub m-0">
           <em>aki</em> — land, earth. The foundation you build on.
         </p>

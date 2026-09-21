@@ -24,8 +24,9 @@ export type Identity = {
 
 export const slugify = (raw: string) =>
   raw
+    .replace(/['\u2019]/g, "") // Tom's Kanban → toms-kanban, not tom-s-kanban
     .toLowerCase()
-    .replace(/[^a-z0-9-]/g, "-")
+    .replace(/[^a-z0-9]+/g, "-") // a RUN of punctuation is one hyphen: "Big" Co → big-co
     .replace(/^-+|-+$/g, "");
 
 export function identityFrom(
@@ -66,6 +67,11 @@ export function rules({
   ENV,
 }: Identity): Record<string, (s: string) => string> {
   const env = (s: string) => s.replace(/AKI_/g, ENV).replace(/aki\.db/g, `${slug}.db`);
+  // The display name is free text: Tom's Kanban, "Aki" Two, R&D. Each file
+  // that carries a literal copy gets it escaped for THAT syntax. Code reads
+  // APP_NAME from app/lib/layout.tsx instead of carrying a copy at all.
+  const str = JSON.stringify(Title); // a TS / Swift / JSON string literal
+  const sh = `'${Title.replace(/'/g, "'\\''")}'`; // a single-quoted shell word
   return {
     "package.json": (s) =>
       s.replace(/"name":\s*"aki"/, `"name": "${slug}"`).replace(/AKI_/g, ENV),
@@ -79,28 +85,27 @@ export function rules({
       env(s)
         .replace(/"aki"/g, `"${slug}"`)
         .replace(/Application Support\/aki/g, `Application Support/${slug}`),
-    "app/server.ts": (s) => env(s).replace(/`aki → \$\{url\}`/, `\`${Title} → \${url}\``),
+    "app/server.ts": env,
     "scripts/build-binary.ts": (s) =>
       env(s)
-        .replace(/title: "aki"/, `title: "${Title}"`)
-        .replace(/publisher: "Aki"/, `publisher: "${Title}"`),
+        .replace(/title: "aki"/, `title: ${str}`)
+        .replace(/publisher: "Aki"/, `publisher: ${str}`),
     "bunfig.toml": env,
     // The window-title fallback when Info.plist has no CFBundleName.
-    "shell/main.swift": (s) => env(s).replace(/\?\? "aki"/, `?? "${Title}"`),
+    "shell/main.swift": (s) => env(s).replace(/\?\? "aki"/, `?? ${str}`),
     "db/index.ts": (s) => s.replace(/aki\.db/g, `${slug}.db`),
     "scripts/package-mac.sh": (s) =>
       s
-        .replace(/APP_NAME:-Aki/, `APP_NAME:-${Title}`)
+        .replace(/APP_NAME_DEFAULT='Aki'/, `APP_NAME_DEFAULT=${sh}`)
         .replace(/EXEC_NAME:-aki/, `EXEC_NAME:-${slug}`)
         .replace(/BUNDLE_ID:-com\.example\.aki/, `BUNDLE_ID:-${id}`),
     "packaging/tauri.conf.stub.json": (s) =>
       s
         .replace(/"identifier": "com\.example\.aki"/, `"identifier": "${id}"`)
-        .replace(/"productName": "Aki"/, `"productName": "${Title}"`)
-        .replace(/"title": "aki"/, `"title": "${Title}"`),
+        .replace(/"productName": "Aki"/, `"productName": ${str}`)
+        .replace(/"title": "aki"/, `"title": ${str}`),
     "app/app.tsx": (s) =>
       s
-        .replace(/You're on Aki\./, `You're on ${Title}.`)
         .replace(/alt="aki"/, `alt="${slug}"`)
         // The landing page's first "Next" step is to run rename. Once it has
         // run, that hint is stale advice on the new app's own home page.
@@ -108,7 +113,7 @@ export function rules({
     // APP_NAME is the single place the display name is spelled; it feeds
     // <title> and the native window title.
     "app/lib/layout.tsx": (s) =>
-      s.replace(/export const APP_NAME = "Aki";/, `export const APP_NAME = "${Title}";`),
+      s.replace(/export const APP_NAME = "Aki";/, `export const APP_NAME = ${str};`),
   };
 }
 

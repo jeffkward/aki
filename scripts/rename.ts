@@ -147,6 +147,8 @@ for (const f of [
 // dot: true — Glob skips dot-directories by default and .claude is one; without
 // it this loop silently finds nothing, which is the same as not scanning at all.
 for (const f of new Glob(".claude/skills/*/SKILL.md").scanSync({ cwd: ".", dot: true })) {
+  // The hotfix skill is ABOUT aki: pulling changes from it. Its mentions are the point.
+  if (f.includes("/hotfix/")) continue;
   for (const [i, line] of readFileSync(f, "utf8").split("\n").entries()) {
     if (/\baki\b/i.test(line)) leftovers.push(`  ${f}:${i + 1}  ${line.trim()}`);
   }

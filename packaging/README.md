@@ -236,8 +236,11 @@ environment; the shell sets the last three itself.
 bun run icon        # assets/icon.svg → assets/aki.icns
 ```
 
-`scripts/make-icns.sh` rasterises with `rsvg-convert` (`brew install librsvg`) and packs
-with `iconutil`, which ships with macOS.
+`scripts/make-icns.sh` rasterises with `rsvg-convert` when it is installed
+(`brew install librsvg`) and otherwise with `qlmanage`, macOS's own QuickLook renderer,
+so a fresh Mac needs nothing. Both pack with `iconutil`, which ships with macOS. The two
+renders are indistinguishable for this icon; if yours uses SVG features QuickLook handles
+poorly (filters, some text), install librsvg.
 
 ### Specs
 
